@@ -29,6 +29,13 @@
     transition: color 0.3s ease;
 }
 
+/* Active link styling */
+.nav-links a.active {
+    font-weight: bold;
+    color: #FFD700; /* Gold for active link */
+}
+
+/* Hover effect */
 .nav-links a:hover {
     color: #FFD700; /* Gold hover effect */
 }
