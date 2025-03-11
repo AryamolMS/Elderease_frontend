@@ -6,25 +6,51 @@ const EventList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch events from the backend
+  // Fetch only pending events
   const fetchEvents = async () => {
     try {
       const response = await axios.get('http://localhost:5000/events');
-      console.log("🟢 Received Events:", response.data); // ✅ Debugging
 
       if (Array.isArray(response.data)) {
-        setEvents(response.data); // ✅ Set the correct response
-      } else if (response.data.events) {
-        setEvents(response.data.events); // ✅ Handle { events: [...] } structure
+        // ❌ Remove already approved or rejected events
+        setEvents(response.data.filter(event => !event.approved && !event.rejected));
+      } else if (Array.isArray(response.data.events)) {
+        setEvents(response.data.events.filter(event => !event.approved && !event.rejected));
       } else {
         throw new Error("Invalid response format");
       }
-
-      setLoading(false);
     } catch (error) {
-      console.error("❌ Error fetching events:", error);
       setError("Failed to load events. Please try again later.");
+    } finally {
       setLoading(false);
+    }
+  };
+
+  // Approve an event and remove it from the list
+  const handleApprove = async (eventId) => {
+    try {
+      await axios.put(`http://localhost:5000/events/approve/${eventId}`);
+      alert("Event approved successfully!");
+
+      // 🔄 Remove approved event from the list
+      setEvents(prevEvents => prevEvents.filter(event => event._id !== eventId));
+    } catch (error) {
+      console.error("Approval error:", error.response?.data || error.message);
+      alert("Failed to approve event. Please try again.");
+    }
+  };
+
+  // Reject an event and remove it from the list
+  const handleReject = async (eventId) => {
+    try {
+      await axios.put(`http://localhost:5000/events/reject/${eventId}`);
+      alert("Event rejected successfully!");
+
+      // 🔄 Remove rejected event from the list
+      setEvents(prevEvents => prevEvents.filter(event => event._id !== eventId));
+    } catch (error) {
+      console.error("Rejection error:", error.response?.data || error.message);
+      alert("Failed to reject event. Please try again.");
     }
   };
 
@@ -32,40 +58,14 @@ const EventList = () => {
     fetchEvents();
   }, []);
 
-  // ✅ Accept Event Function
-  const handleAccept = async (eventId) => {
-    try {
-      await axios.put(`http://localhost:5000/events/accept/${eventId}`);
-      alert("Event accepted successfully!");
-      fetchEvents(); // Refresh the event list
-    } catch (error) {
-      console.error("❌ Error accepting event:", error);
-      alert("Failed to accept event. Please try again.");
-    }
-  };
-
-  // ❌ Reject Event Function
-  const handleReject = async (eventId) => {
-    try {
-      await axios.delete(`http://localhost:5000/events/reject/${eventId}`);
-      alert("Event rejected successfully!");
-      fetchEvents(); // Refresh the event list
-    } catch (error) {
-      console.error("❌ Error rejecting event:", error);
-      alert("Failed to reject event. Please try again.");
-    }
-  };
-
-  if (loading) return <p className="text-center text-gray-600">Loading events...</p>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
+  if (loading) return <p>Loading events...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="bg-gray-100 min-h-screen p-8">
-      <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">
-        Manage Events
-      </h1>
+      <h1 className="text-4xl font-bold text-center mb-6">Manage Events</h1>
       {events.length === 0 ? (
-        <p className="text-center text-gray-600">No events available.</p>
+        <p className="text-center">No pending events available.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white shadow-md rounded-lg">
@@ -90,9 +90,9 @@ const EventList = () => {
                   <td className="py-4 px-6 flex justify-center space-x-2">
                     <button
                       className="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600"
-                      onClick={() => handleAccept(event._id)}
+                      onClick={() => handleApprove(event._id)}
                     >
-                      Accept
+                      Approve
                     </button>
                     <button
                       className="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600"

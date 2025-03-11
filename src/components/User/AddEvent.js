@@ -18,10 +18,10 @@ const AddEvent = () => {
 
     const formattedEvent = { 
         ...event, 
-        date: new Date(event.date).toISOString() // Convert date to ISO format 
+        date: new Date(event.date).toISOString()
     };
 
-    const token = localStorage.getItem('token'); // Get JWT token from storage
+    const token = localStorage.getItem('token');
 
     console.log("🟢 Stored Token Before Request:", token); // ✅ Debugging step
 
@@ -33,12 +33,12 @@ const AddEvent = () => {
     try {
         const response = await axios.post('http://localhost:5000/events', formattedEvent, {
             headers: { 
-                Authorization: `Bearer ${token}`, 
+                Authorization: `Bearer ${token}`,  // ✅ Ensure token is included
                 'Content-Type': 'application/json' 
             }
         });
 
-        console.log("✅ Server Response:", response.data); // ✅ Debugging
+        console.log("✅ Server Response:", response.data);
 
         alert('Event added successfully!');
         setEvent({ title: '', description: '', date: '', link: '' });
@@ -48,7 +48,6 @@ const AddEvent = () => {
         alert(error.response?.data?.message || 'Failed to add event. Please try again.');
     }
 };
-
 
 
   return (

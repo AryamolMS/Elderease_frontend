@@ -1,19 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import VideoCard from './VideoCard'; // Component for displaying tutorials
 import './HomePage.css';
 
 const HomePage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [tutorials, setTutorials] = useState([]);
+    const [filteredTutorials, setFilteredTutorials] = useState([]);
 
-    const searchTutorials = (query) => {
-        const allTutorials = [
-            { id: 1, title: 'How to perform a bank transaction', videoId: 'dQw4w9WgXcQ' },
-            { id: 2, title: 'How to use ElderEase for support', videoId: 'M7lc1UVf-VE' }
-        ];
-        setTutorials(allTutorials.filter(tutorial => tutorial.title.toLowerCase().includes(query.toLowerCase())));
+    // ✅ Fetch tutorials from backend on mount
+    useEffect(() => {
+        fetchTutorials();
+    }, []);
+
+    const fetchTutorials = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/tutorials');
+            setTutorials(response.data);
+        } catch (error) {
+            console.error("❌ Error fetching tutorials:", error);
+        }
     };
 
+    // ✅ Filter tutorials based on search query
+    const searchTutorials = (query) => {
+        setSearchQuery(query);
+        if (query.trim() === '') {
+            setFilteredTutorials([]); // ✅ Hide tutorials when search is empty
+        } else {
+            setFilteredTutorials(
+                tutorials.filter(tutorial =>
+                    tutorial.title.toLowerCase().includes(query.toLowerCase())
+                )
+            );
+        }
+    };
+
+    // ✅ Voice Search Functionality
     const startVoiceSearch = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
@@ -54,18 +77,24 @@ const HomePage = () => {
                     type="text" 
                     className="search-input"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => searchTutorials(e.target.value)}
                     placeholder="Search tutorials..." 
                 />
-                <button className="search-btn" onClick={() => searchTutorials(searchQuery)}>Search</button>
                 <button className="voice-btn" onClick={startVoiceSearch}>🎙️</button>
             </div>
 
-            <div className="tutorial-cards">
-                {tutorials.map(tutorial => (
-                    <VideoCard key={tutorial.id} videoId={tutorial.videoId} title={tutorial.title} />
-                ))}
-            </div>
+            {/* ✅ Display Tutorials Only When Search is Performed */}
+            {searchQuery.trim() !== '' && (
+                <div className="tutorial-cards">
+                    {filteredTutorials.length === 0 ? (
+                        <p className="text-red-600 text-center">No tutorials found.</p>
+                    ) : (
+                        filteredTutorials.map(tutorial => (
+                            <VideoCard key={tutorial._id} videoId={tutorial.videoId} title={tutorial.title} />
+                        ))
+                    )}
+                </div>
+            )}
         </div>
     );
 };

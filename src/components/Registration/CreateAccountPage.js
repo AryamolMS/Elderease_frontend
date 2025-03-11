@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreateAccountPage.css';
-import { registerAPI } from '../services/allAPI';
+import { registerAPI } from '../../services/allAPI';
 
 const CreateAccountPage = () => {
   // State hooks to store form data and messages

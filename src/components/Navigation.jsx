@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
-const Navbar = () => {
+const Navigation = () => {
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
 
@@ -25,7 +25,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.clear(); // Remove user data
     setUserRole(null); // Update state to force re-render
-    navigate('/'); // Redirect to login page
+    navigate('/login'); // Redirect to login page
   };
 
   return (
@@ -48,23 +48,19 @@ const Navbar = () => {
           </NavLink>
         )}
 
-        {userRole === 'admin' && (
-          <NavLink to="/events" activeClassName="active" className="text-white mx-4">
-            Events
-          </NavLink>
+{userRole === 'admin' && (
+        <NavLink to="/events" activeClassName="active" className="text-white mx-4">
+          Events
+        </NavLink>
         )}
-
-
+        <NavLink to="/support" activeClassName="active" className="text-white mx-4">
+          Support
+        </NavLink>
         <NavLink to="/health" activeClassName="active" className="text-white mx-4">
           Health Resources
         </NavLink>
         <NavLink to="/contact-us" activeClassName="active" className="text-white mx-4">
           Contact Us
-        </NavLink>
-
-        {/* ✅ New "Webinars" link (visible to all users) */}
-        <NavLink to="/user-webinar" activeClassName="active" className="text-white mx-4">
-          Webinars
         </NavLink>
 
         {/* ✅ Show "Approve Events" only for Admin */}
@@ -73,9 +69,7 @@ const Navbar = () => {
             Approve Events
           </NavLink>
         )}
-        <NavLink to="/articles" activeClassName="active" className="text-white mx-4">
-            Articles
-          </NavLink>  
+
         {/* Show Login/Logout Button */}
         {userRole ? (
           <button className="logout-btn" onClick={handleLogout}>
@@ -91,4 +85,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navigation;
