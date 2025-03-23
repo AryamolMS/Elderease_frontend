@@ -17,7 +17,7 @@ const AdminNavbar = () => {
         <Link to="/events" className="mx-4">Events List</Link>
         <Link to="/approve-events" className="mx-4">Approved Events</Link>
         <Link to="/admin-tutorials" className="mx-4">Tutorilas</Link>
-        {/* <Link to="/rejected-events" className="mx-4">Rejected Events</Link> */}
+        <Link to="/adminchat" className="mx-4">Admin chat</Link>
         <button onClick={handleLogout} className="mx-4 bg-red-500 px-3 py-1 rounded">
           Logout
         </button>

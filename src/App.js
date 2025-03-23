@@ -16,6 +16,7 @@ import AdminTutorials from './components/Admin/AdminTutorials';
 import Tutorials from './components/User/Tutorials';
 import HealthResources from './components/User/HealthResourses';
 import Article from './components/User/Article';
+import AdminChat from './components/Admin/AdminChat';
 
 const App = () => {
     const [userRole, setUserRole] = useState(localStorage.getItem("userRole")); // Get role from localStorage
@@ -48,6 +49,7 @@ const App = () => {
                 <Route path='/tutorials' element={<Tutorials/>}/>
                 <Route path='/health' element={<HealthResources/>}/>
                 <Route path='/articles' element={<Article/>}/>
+                <Route path='/adminchat' element={<AdminChat/>}/>
             </Routes>
         </Router>
     );
