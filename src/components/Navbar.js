@@ -76,6 +76,9 @@ const Navbar = () => {
         <NavLink to="/articles" activeClassName="active" className="text-white mx-4">
             Articles
           </NavLink>  
+          <NavLink to="/dailyquiz" activeClassName="active" className="text-white mx-4">
+            Dailyquiz
+          </NavLink>  
         {/* Show Login/Logout Button */}
         {userRole ? (
           <button className="logout-btn" onClick={handleLogout}>

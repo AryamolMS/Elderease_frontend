@@ -18,6 +18,8 @@ const AdminNavbar = () => {
         <Link to="/approve-events" className="mx-4">Approved Events</Link>
         <Link to="/admin-tutorials" className="mx-4">Tutorilas</Link>
         <Link to="/adminchat" className="mx-4">Admin chat</Link>
+        <Link to="/questions" className="mx-4">Questions</Link>
+        <Link to="/answers" className="mx-4">Answers</Link>
         <button onClick={handleLogout} className="mx-4 bg-red-500 px-3 py-1 rounded">
           Logout
         </button>

@@ -136,15 +136,8 @@ const LoginPage = () => {
         </form>
 
         <div className="forgot-password">
-          <span 
-            className="forgot-password-link" 
-            onClick={() => navigate('/forgot-password')}
-          >
-            Forgot Password?
-          </span>
-          
-          <span 
-            className="create-account-link" 
+        <span 
+            className="create-account-link text-center" 
             onClick={() => navigate('/create-account')}
           >
             Create Account

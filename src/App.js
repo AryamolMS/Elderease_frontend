@@ -17,6 +17,10 @@ import Tutorials from './components/User/Tutorials';
 import HealthResources from './components/User/HealthResourses';
 import Article from './components/User/Article';
 import AdminChat from './components/Admin/AdminChat';
+import AddQuestion from './components/Admin/AddQuestion';
+import DailyQuiz from './components/User/DailyQuiz';
+import { UserProvider } from './context/userContext';
+import AdminAnswers from './components/Admin/AdminAnswers';
 
 const App = () => {
     const [userRole, setUserRole] = useState(localStorage.getItem("userRole")); // Get role from localStorage
@@ -32,6 +36,7 @@ const App = () => {
     }, []);
 
     return (
+        <UserProvider>
         <Router>
             {userRole === "admin" ? <AdminNavbar /> : <Navbar />} {/* Show the correct navbar */}
             <Routes>
@@ -50,8 +55,12 @@ const App = () => {
                 <Route path='/health' element={<HealthResources/>}/>
                 <Route path='/articles' element={<Article/>}/>
                 <Route path='/adminchat' element={<AdminChat/>}/>
+                <Route path='/questions' element={<AddQuestion/>}/>
+                <Route path='/dailyquiz' element={<DailyQuiz/>}/>
+                <Route path='/answers' element={<AdminAnswers/>}/>
             </Routes>
         </Router>
+        </UserProvider>
     );
 };
 
