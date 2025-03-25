@@ -5,6 +5,7 @@ const DailyQuiz = () => {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [username, setUsername] = useState("");
+  const [score, setScore] = useState(null); // State to store score
 
   useEffect(() => {
     axios
@@ -14,7 +15,7 @@ const DailyQuiz = () => {
   }, []);
 
   const handleOptionChange = (questionId, selectedOption) => {
-    setAnswers({ ...answers, [questionId]: selectedOption }); // Store MongoDB _id
+    setAnswers({ ...answers, [questionId]: selectedOption });
   };
 
   const handleSubmit = () => {
@@ -24,22 +25,18 @@ const DailyQuiz = () => {
     }
 
     const formattedAnswers = Object.entries(answers).map(([questionId, selectedOption]) => ({
-      questionId, // Ensure this is a valid MongoDB ObjectId
+      questionId,
       selectedOption
     }));
 
-    const submissionData = {
-      username,
-      answers: formattedAnswers,
-    };
-
-    console.log("Submitting data:", submissionData); // Debugging log
+    const submissionData = { username, answers: formattedAnswers };
 
     axios
       .post("http://localhost:5000/questions/submit", submissionData)
-      .then(() => {
+      .then((response) => {
         alert("Your answers have been submitted!");
         setAnswers({});
+        setScore(response.data.score); // Store received score
         document.querySelectorAll("input[type=radio]").forEach((radio) => (radio.checked = false));
       })
       .catch((error) => console.error("Error submitting answers:", error));
@@ -91,6 +88,12 @@ const DailyQuiz = () => {
           >
             Submit Answers
           </button>
+        </div>
+      )}
+
+      {score !== null && (
+        <div className="mt-6 text-center">
+          <h3 className="text-xl font-semibold text-green-600">Your Score: {score} / {questions.length}</h3>
         </div>
       )}
     </div>
