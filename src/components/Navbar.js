@@ -8,13 +8,21 @@ const Navbar = () => {
 
   // ✅ Ensure state updates when localStorage changes
   useEffect(() => {
-    const handleStorageChange = () => {
+    const updateRole = () => {
       setUserRole(localStorage.getItem('userRole'));
     };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+  
+    updateRole(); // initial check
+  
+    // Listen for custom 'userRoleChanged' event
+    window.addEventListener('userRoleChanged', updateRole);
+  
+    // Cleanup
+    return () => {
+      window.removeEventListener('userRoleChanged', updateRole);
+    };
   }, []);
+  
 
   // ✅ Update state when component mounts (ensures role updates after login)
   useEffect(() => {
@@ -42,11 +50,11 @@ const Navbar = () => {
         </NavLink>
 
         {/* ✅ Show "Add Event" only if userRole is "user" (not admin) */}
-        {userRole === 'user' && (
+        
           <NavLink to="/add-event" activeClassName="active" className="text-white mx-4">
             Add Event
           </NavLink>
-        )}
+        
 
         {userRole === 'admin' && (
           <NavLink to="/events" activeClassName="active" className="text-white mx-4">
@@ -79,6 +87,9 @@ const Navbar = () => {
           <NavLink to="/dailyquiz" activeClassName="active" className="text-white mx-4">
             Dailyquiz
           </NavLink>  
+          <NavLink to="/groupchat" activeClassName="active" className="text-white mx-4">
+          Groupchat
+          </NavLink> 
         {/* Show Login/Logout Button */}
         {userRole ? (
           <button className="logout-btn" onClick={handleLogout}>

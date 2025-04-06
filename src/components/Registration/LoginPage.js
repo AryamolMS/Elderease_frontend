@@ -7,39 +7,6 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   
-  /* const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Check for hardcoded admin credentials
-    if (email === 'admin@gmail.com' && password === 'admin123') {
-      console.log('Admin login successful');
-      alert('Welcome Admin!');
-      // Redirect to the Admin Dashboard or another page
-      navigate('/admin-dashboard');
-      return;
-    }
-
-    try {
-      const response = await fetch('http://localhost:5000/user/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-  
-      const data = await response.json();
-      if (response.ok) {
-        console.log('Login successful:', data);
-        alert("Login successful!");
-        // Navigate to another page or save token
-        navigate('/'); // Redirect to home or another page after successful login
-      } else {
-        alert("Login failed!");
-        console.error('Login failed:', data.message);
-      }
-    } catch (err) {
-      console.error('Error:', err);
-    }
-  }; */
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import AdminNavbar from './components/Admin/AdminNavbar'; // Import Admin Navbar
 import AddEvent from './components/User/AddEvent';
-import HomePage from './components/HomePage';
+import HomePage from './components/Homepage.js';
 import ContactUs from './components/ContactUs';
 import Adminhome from './components/Admin/Adminhome';
 import CreateAccountPage from './components/Registration/CreateAccountPage';
@@ -21,6 +21,8 @@ import AddQuestion from './components/Admin/AddQuestion';
 import DailyQuiz from './components/User/DailyQuiz';
 import { UserProvider } from './context/userContext';
 import AdminAnswers from './components/Admin/AdminAnswers';
+import Groupchat from './components/User/Groupchat.jsx';
+import GroupChatPage from './components/User/GroupChatPage.jsx';
 
 const App = () => {
     const [userRole, setUserRole] = useState(localStorage.getItem("userRole")); // Get role from localStorage
@@ -58,6 +60,8 @@ const App = () => {
                 <Route path='/questions' element={<AddQuestion/>}/>
                 <Route path='/dailyquiz' element={<DailyQuiz/>}/>
                 <Route path='/answers' element={<AdminAnswers/>}/>
+                <Route path='/groupchat' element={<Groupchat/>}/>
+                <Route path='/groupchatpage' element={<GroupChatPage/>}/>
             </Routes>
         </Router>
         </UserProvider>

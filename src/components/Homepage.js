@@ -63,10 +63,16 @@ const HomePage = () => {
             recognition.start();
 
             recognition.onresult = (event) => {
-                const query = event.results[0][0].transcript;
-                setSearchQuery(query);
-                searchTutorials(query);
+                const rawQuery = event.results[0][0].transcript;
+                const formattedQuery = rawQuery
+                    .split(' ')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ');
+                    
+                setSearchQuery(formattedQuery);
+                searchTutorials(formattedQuery);
             };
+            
 
             recognition.onerror = (event) => {
                 alert(`Speech Recognition Error: ${event.error}`);

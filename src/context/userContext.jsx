@@ -1,17 +1,17 @@
-import { createContext, useState, useEffect } from "react";
+// userContext.js
+import { createContext, useEffect, useState } from "react";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Load user from local storage
   useEffect(() => {
-    const loggedUser = localStorage.getItem("user");
-    if (loggedUser) {
-      setUser(JSON.parse(loggedUser));
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
-  }, []);
+  }, []); // ✅ Don’t forget the dependency array
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
