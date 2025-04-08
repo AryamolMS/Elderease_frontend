@@ -6,10 +6,9 @@ const AdminTutorials = () => {
   const [category, setCategory] = useState('');
   const [videoId, setVideoId] = useState('');
   const [message, setMessage] = useState('');
-  const [tutorials, setTutorials] = useState([]); // ✅ Store tutorial list
-  const [isOpen, setIsOpen] = useState(false); // ✅ Modal state
+  const [tutorials, setTutorials] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
-  // ✅ Fetch tutorials from backend
   useEffect(() => {
     fetchTutorials();
   }, []);
@@ -27,17 +26,27 @@ const AdminTutorials = () => {
     e.preventDefault();
     try {
       await axios.post('http://localhost:5000/tutorials', { title, category, videoId });
-
-      alert('✅ Tutorial added successfully!'); // ✅ Show success alert
-
+      alert('✅ Tutorial added successfully!');
       setTitle('');
       setCategory('');
       setVideoId('');
       setIsOpen(false);
-      
-      fetchTutorials(); // ✅ Refresh the list after adding
+      fetchTutorials();
     } catch (error) {
-      alert('❌ Failed to add tutorial. Please try again.'); // ❌ Show error alert
+      alert('❌ Failed to add tutorial. Please try again.');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this tutorial?')) {
+      try {
+        await axios.delete(`http://localhost:5000/tutorials/${id}`);
+        alert('🗑️ Tutorial deleted successfully!');
+        fetchTutorials();
+      } catch (error) {
+        alert('❌ Failed to delete tutorial.');
+        console.error("❌ Error deleting tutorial:", error);
+      }
     }
   };
 
@@ -50,7 +59,6 @@ const AdminTutorials = () => {
         + Add Tutorial
       </button>
 
-      {/* ✅ Modal */}
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-xl w-96">
@@ -59,18 +67,15 @@ const AdminTutorials = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <input 
                 type="text" placeholder="Tutorial Title" value={title} onChange={(e) => setTitle(e.target.value)}
-                className="block w-full p-2 border rounded"
-                required
+                className="block w-full p-2 border rounded" required
               />
               <input 
                 type="text" placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)}
-                className="block w-full p-2 border rounded"
-                required
+                className="block w-full p-2 border rounded" required
               />
               <input 
                 type="text" placeholder="YouTube Video ID" value={videoId} onChange={(e) => setVideoId(e.target.value)}
-                className="block w-full p-2 border rounded"
-                required
+                className="block w-full p-2 border rounded" required
               />
               <div className="flex justify-end space-x-2">
                 <button 
@@ -92,7 +97,6 @@ const AdminTutorials = () => {
         </div>
       )}
 
-      {/* ✅ List of Added Tutorials */}
       <div className="mt-8">
         <h2 className="text-2xl font-bold mb-4">Tutorial List</h2>
         {tutorials.length === 0 ? (
@@ -111,6 +115,14 @@ const AdminTutorials = () => {
                     title={tutorial.title} 
                     allowFullScreen
                   ></iframe>
+                </div>
+                <div className="mt-3 flex justify-center">
+                  <button 
+                    onClick={() => handleDelete(tutorial._id)}
+                    className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700 transition"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}

@@ -26,9 +26,13 @@ const Groupchat = () => {
   };
 
   const sendMessage = async () => {
-    if (!text.trim() || !userId || !username) {
-      console.warn("User is not loaded yet");
+    if (!userId || !username) {
+      alert("Please login to chat.");
       return;
+    }
+  
+    if (!text.trim()) {
+      return; // Don't send empty messages
     }
   
     try {
@@ -44,6 +48,7 @@ const Groupchat = () => {
       console.error("Error sending message:", error);
     }
   };
+  
   
 
   useEffect(() => {
